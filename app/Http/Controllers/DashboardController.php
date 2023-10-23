@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
-use App\Models\EmployeeRating;
-use App\Models\Template;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,15 +9,6 @@ class DashboardController extends Controller
 {
     public function dashboard(Request $request)
     {
-        if (auth()->user()->hasRole('employee')) {
-            $employee = Employee::where('user_id', auth()->user()->id)->first();
-            $templates = Template::all()->pluck('title', 'id');
-            $ratings = EmployeeRating::where([
-                'user_id' => $employee->user_id,
-            ])->get();
-            return view('employees.show', compact('employee', 'templates', 'ratings'));
-
-        }
         return view('dashboard');
     }
 
