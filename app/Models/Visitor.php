@@ -13,6 +13,7 @@ class Visitor extends Model
     protected $fillable = [
         'name',
         'status',
+        'position',
     ];
 
 }

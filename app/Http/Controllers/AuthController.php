@@ -11,8 +11,19 @@ class AuthController extends Controller
 
     public function login()
     {
-        $visitors = Visitor::all();
-        return view('auth.login', compact('visitors'));
+        return view('auth.login');
+    }
+
+    public function cards()
+    {
+        $visitors = Visitor::where('status','!=', 'done')->get();
+        return view('auth.cards', compact('visitors'));
+    }
+
+    public function secretary()
+    {
+        $visitors = Visitor::where('status','!=', 'done')->get();
+        return view('auth.secretary', compact('visitors'));
     }
 
     public function sendVisitor(Request $request)
@@ -20,6 +31,7 @@ class AuthController extends Controller
         Visitor::create([
             'name' => $request->name,
             'status' => 'pending',
+            'position' => $request->position
         ]);
 
         return response()->json(['status' => 'success', 'message' => null])->setStatusCode(200);
