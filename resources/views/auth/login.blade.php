@@ -85,11 +85,11 @@
                                     <h1 class="h4 text-gray-900 mb-4">مرحبا بعودتكم!</h1>
                                 </div>
                                 <form class="user">
-                                    <a href="{{route('secretary')}}" class="btn btn-google btn-user btn-block">
+                                    <a href="{{route('cards')}}" class="btn btn-google btn-user btn-block">
                                         الرئيس
                                     </a>
                                     <br><br>
-                                    <a href="{{route('cards')}}" class="btn btn-facebook btn-user btn-block">
+                                    <a href="{{route('secretary')}}" class="btn btn-facebook btn-user btn-block">
                                          السكرتارية
                                     </a>
                                 </form>
