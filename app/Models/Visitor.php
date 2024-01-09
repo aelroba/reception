@@ -14,6 +14,8 @@ class Visitor extends Model
         'name',
         'status',
         'position',
+        'notes',
+        'other_notes'
     ];
 
 }

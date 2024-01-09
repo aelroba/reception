@@ -68,6 +68,8 @@
     <img id="loading-image" src="{{asset('loading.gif')}}" alt="Loading..." />
 </div>
 <div class="container">
+    <br>
+    <a class="btn btn-primary" href="{{url('/')}}">الرجوع للرئيسية</a>
 
     <!-- Outer Row -->
     <div class="row justify-content-center mt-4">
@@ -82,6 +84,37 @@
                         <p class="m-0 font-weight-normal text-primary text-center">{{$visitor->position}}</p>
                     </div>
                     <div class="card-body">
+                        <div class="card mb-4 bg-light" style="border: 0;">
+                            <div class="card-body text-secondary small" style="border: 0;padding: 12px 20px;font-weight: bold;font-size: 1.2rem;text-align: center;">
+                                رقم الطلب : {{ $visitor->id }}
+                            </div>
+                        </div>
+                        <div class="card mb-4 bg-light" style="border: 0;">
+                            <div class="card-body text-secondary" style="border: 0;padding: 12px 20px;font-weight: bold;font-size: 1.2rem;text-align: center;">
+                                ملاحظات :
+                            </div>
+                            <div class="card-body text-secondary" style="border: 0;padding: 12px 20px;font-weight: bold;font-size: 1.2rem;text-align: center;">
+                                {{ $visitor->notes }}
+                            </div>
+                        </div>
+{{--                        @if(!empty($visitor->other_notes))--}}
+                        <div class="card mb-4 bg-light" style="border: 0;">
+                            <div class="card-body text-secondary" style="border: 0;padding: 12px 20px;font-weight: bold;font-size: 1.2rem;text-align: center;">
+                                ملاحظات الرئيس :
+                            </div>
+                            <div class="card-body text-secondary" style="border: 0;padding: 12px 20px;font-weight: bold;font-size: 1.2rem;text-align: center;">
+                                {{ $visitor->other_notes }}
+                            </div>
+                        </div>
+{{--                        @endif--}}
+
+{{--                        @if(in_array($visitor->status, ['waiting', 'pending']))--}}
+                        <div class="card mb-4 bg-light" style="border: 0;">
+                            <div class="card-body text-secondary small" style="border: 0;padding: 12px 20px;font-weight: bold;font-size: 1.2rem;text-align: center;">
+                                مدة الانتظار : {{ $visitor->created_at->diffForHumans(\Carbon\Carbon::now()) }}
+                            </div>
+                        </div>
+{{--                        @endif--}}
                         @if($visitor->status == 'pending')
                             <div class="card mb-4 bg-light border-left-secondary" style="border: 0;">
                                 <div class="card-body text-secondary" style="border: 0;padding: 12px 20px;font-weight: bold;font-size: 1.2rem;text-align: center;">
@@ -113,6 +146,18 @@
                                 </div>
                             </div>
                         @endif
+
+                        <form class="user" onsubmit="otherStatus('{{$visitor->id}}');">
+                            <div class="form-group">
+                                        <textarea type="text" class="form-control form-control-user"
+                                                  id="otherNotes_{{$visitor->id}}" aria-describedby="notes"
+                                                  rows="3"
+                                                  placeholder="بامكانكم كتابة الملاحظات ..."></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-user btn-block" onclick="otherStatus('{{$visitor->id}}');">
+                                ارسال
+                            </button>
+                        </form>
                         <h5 class="font-weight-bold text-success text-uppercase mb-1">
                         </h5>
                             <div class="d-flex">
@@ -173,7 +218,7 @@
 
             request.done(function( data ) {
                 if(data.status == 'success') {
-                    window.location.href = '/'
+                    window.location.reload(true);
                 }
             });
 
@@ -197,13 +242,35 @@
 
         request.done(function( data ) {
             if(data.status == 'success') {
-                window.location.href = '/'
+                window.location.reload(true);
             }
         });
 
         request.fail(function( jqXHR, textStatus ) {
             alert( "Request failed: " + textStatus );
         });
+    }
+
+    function otherStatus(id) {
+        $('#loading').show();
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        var other_notes = $('#otherNotes_'+id).val();
+        var request = $.ajax({
+            url: "{{ route('login.other_status') }}",
+            method: "POST",
+            data: {id,  other_notes, _token: CSRF_TOKEN},
+        });
+
+        request.done(function( data ) {
+            if(data.status == 'success') {
+                window.location.reload(true);
+            }
+        });
+
+        request.fail(function( jqXHR, textStatus ) {
+            alert( "Request failed: " + textStatus );
+        });
+        return false;
     }
 </script>
 <script>
