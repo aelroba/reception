@@ -212,20 +212,6 @@
 
                         </div>
                         <div class="d-flex gap-2 "><hr style="width: 100%;"></div>
-                        <div class="d-flex gap-2 ">
-                            <form class="user d-flex gap-2 " onsubmit="otherStatus('{{$visitor->id}}');">
-                                <div class="form-group">
-                                        <textarea type="text" class="form-control form-control-user"
-                                                  id="otherNotes_{{$visitor->id}}" aria-describedby="notes"
-                                                  rows="1"
-                                                  placeholder="بامكانكم كتابة الملاحظات ..."></textarea>
-                                </div>
-                                <button type="button" class="btn btn-primary btn-user btn-block" onclick="otherStatus('{{$visitor->id}}');">
-                                    ارسال
-                                </button>
-                            </form>
-                        </div>
-                        <div class="d-flex gap-2 "><hr style="width: 100%;"></div>
                         <div class="d-flex gap-2 pt-0">
                             <button type="button" onclick="changeStatus('{{$visitor->id}}', 'accepted')" class="btn btn-primary btn-sm fw-bold w-50"><i class="bx bx-user me-1"></i> ادخل الضيف</button>
                             <button type="button" onclick="changeStatus('{{$visitor->id}}', 'waiting')" class="btn btn-warning btn-sm fw-bold  w-50"><i class="bx bx-message-square-dots me-1"></i> ارسال الضيف في صالة الانتظار</button>
@@ -304,10 +290,11 @@
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var nationalId = $('#nationalId').val();
             var visitorPosition = $('#visitorPosition').val();
+            var notes = $('#notes').val();
             var request = $.ajax({
                 url: "{{ route('login.send_visitor') }}",
                 method: "POST",
-                data: {name : nationalId, position: visitorPosition, _token: CSRF_TOKEN},
+                data: {name : nationalId, position: visitorPosition, notes, _token: CSRF_TOKEN},
             });
 
             request.done(function( data ) {
